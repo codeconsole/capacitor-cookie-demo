@@ -1,0 +1,20 @@
+{
+  "name": "cookie-demo",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "server": "node server.js",
+    "cap3": "cd cap3 && npx cap run android --target=$(emulator -list-avds | tail -1)",
+    "cap4": "cd cap4 && npx cap run android --target=$(emulator -list-avds | tail -1)"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "jquery": "^3.6.1"
+  }  
+}

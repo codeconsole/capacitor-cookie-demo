@@ -1,0 +1,27 @@
+<html>
+<head>
+	<script type="text/javascript" src="npm/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+<h1>Capacitor v<span id="version"></span></h1>
+<script type="text/javascript">
+	function fetchData() {
+		$.ajax({
+            url: 'https://dev.pilotaid.org:8443',
+            xhrFields: { withCredentials: true }, // send cookies
+            success: function(data, textStatus, xhr) {
+            	alert(JSON.stringify(data))
+            },
+            dataType: 'json'
+        })
+        return false
+	}
+    $(function() {
+        $.getJSON('version.json').done(function(data) {
+            $('span#version').text(data.version)
+        })
+    })
+</script>
+<a href="#" onclick="return fetchData()">Fetch Data</a>
+</body>
+

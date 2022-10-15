@@ -1,0 +1,19 @@
+{
+  "name": "cap3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "capacitor:copy:before": "echo '{ \"version\": \"'$(npx cap --version)'\" }' > ../www/version.json",
+    "capacitor:copy:after": "rm ../www/version.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@capacitor/cli": "^3.8.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^3.8.0",
+    "@capacitor/ios": "^3.8.0"
+  }
+}
