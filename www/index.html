@@ -3,25 +3,34 @@
 	<script type="text/javascript" src="npm/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
-<h1>Capacitor v<span id="version"></span></h1>
-<script type="text/javascript">
-	function fetchData() {
-		$.ajax({
-            url: 'https://dev.pilotaid.org:8443',
-            xhrFields: { withCredentials: true }, // send cookies
-            success: function(data, textStatus, xhr) {
-            	alert(JSON.stringify(data))
-            },
-            dataType: 'json'
+    <h1>Capacitor v<span id="version"></span></h1>
+    <script type="text/javascript">
+    	function fetchData(jsonp) {
+            var opts = {
+                url: 'https://dev.pilotaid.org:8443',
+                dataType: jsonp?'jsonp':'json',
+                success: function(data, textStatus, xhr) {
+                    alert(JSON.stringify(data))
+                    $('select[name=cookie]').val('')
+                }
+            }
+            if ($('select[name=cookie]').val()) {
+                opts.data = { cookie: $('select[name=cookie]').val() }
+            }
+            if (!jsonp) {
+                opts.xhrFields = { withCredentials: true } // send cookies with json request.   
+            }
+    		$.ajax(opts)
+            return false
+    	}
+        $(function() {
+            $.getJSON('version.json').done(function(data) {
+                $('span#version').text(data.version)
+            })
         })
-        return false
-	}
-    $(function() {
-        $.getJSON('version.json').done(function(data) {
-            $('span#version').text(data.version)
-        })
-    })
-</script>
-<a href="#" onclick="return fetchData()">Fetch Data</a>
+    </script>
+    Cookie:<select name="cookie"><option value="">None</option><option value="set">Set</option><option value="samesite">Set SameSite=None</option><option value="delete">Delete</option></select>
+    <a href="#" onclick="return fetchData(false)">JSON</a>
+    <a href="#" onclick="return fetchData(true)">JSONP</a>
 </body>
 

@@ -5,7 +5,9 @@
   "scripts": {
     "server": "node server.js",
     "cap3": "cd cap3 && npx cap run android --target=$(emulator -list-avds | tail -1)",
-    "cap4": "cd cap4 && npx cap run android --target=$(emulator -list-avds | tail -1)"
+    "cap4": "cd cap4 && npx cap run android --target=$(emulator -list-avds | tail -1)",
+    "cap4n": "cd cap4n && npx cap run android --target=$(emulator -list-avds | tail -1)",
+    "cap4s": "cd cap4s && npx cap run android --target=$(emulator -list-avds | tail -1)"    
   },
   "author": "",
   "license": "ISC",

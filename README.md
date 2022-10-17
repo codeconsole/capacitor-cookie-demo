@@ -1,4 +1,15 @@
-# Cookies No Longer Work in Capactor 4
+# Cookies No Longer Work in Capactor 4 Android
+
+Starting with Capacitor 4, Cookies will only persist if the scheme and hostname match the server.  
+If either does not match, the cookie must have SameSite=None to work.
+
+The following apps demonstrate the issue:
+cap3 - plain cookies works for both JSON and JSONP requests
+cap4 - only SameSite=None cookies work for JSON or JSONP requests.
+cap4n - using the Native Plugin, plain cookies will work for JSON requests, but not for JSONP requests.
+cap4s - plain cookies work when setting both the scheme and hostname
+
+https://forum.ionicframework.com/t/capacitor-4-3-http-unable-to-load-local-files/227368
 
 The following application demonstrates how cookies work in Capacitor 3, but not in Capacitor 4.
 
@@ -10,13 +21,12 @@ npm install
 npx webpack
 cd cap3
 npm install
+npx cap add android
 cd ..
-cd cap4 
-npm install
-cd ..
+...
 ```
 
-The tricky part in demonstrating the issue is setting up an https server. You will need to provide a certificate and a private key `fullchain.pem` `privkey.pem` in the cert folder (for your domain, for example: dev.example.com).
+The tricky part in demonstrating the issue is setting up an https server. You will need to provide a certificate and a private key `fullchain.pem` `privkey.pem` in the cert folder (for your domain, for example: dev.pilotaid.org).
 
 Then you will need to add a host entry to the emulator so that it points to your local server.
 ```
@@ -24,9 +34,9 @@ Then you will need to add a host entry to the emulator so that it points to your
 ```
 to update the hosts file of the emulator, then:
 ```
-./scripts/addHost.sh dev.example.com
+./scripts/addHost.sh dev.pilotaid.org
 ```
-to point dev.example.com to your local server.
+to point dev.pilotaid.org to the computer running your emulator.
 
 Once that is done, you can start the local server:
 ```

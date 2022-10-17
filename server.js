@@ -1,5 +1,6 @@
 const https = require(`https`)
 const fs = require(`fs`)
+const url = require('url');
 
 // const options = {
 //   key: fs.readFileSync(`cert/privkey.pem`),
@@ -24,7 +25,7 @@ https.createServer(options, function(req,res){
     'Access-Control-Max-Age': 30 * 24 * 60 * 60, // 30 days
   }
 
-  console.log('['+req.headers.origin+'] : '+req.method + ' ' + req.url + ' ['+getCookieValue(req.headers.cookie, 'mycookie')+']')
+  console.log('[Origin:'+req.headers.origin+'] : '+req.method + ' ' + req.url + ' ['+getCookieValue(req.headers.cookie, 'mycookie')+']')
 
   if (req.headers.origin) {
       headers['Access-Control-Allow-Origin'] = req.headers.origin
@@ -37,11 +38,30 @@ https.createServer(options, function(req,res){
   }
 
   if (['GET', 'POST'].indexOf(req.method) > -1) {
+    const query = url.parse(req.url, true).query
+    if (query.cookie) {
+      if (query.cookie == 'delete') {
+        headers["Set-Cookie"] = 'mycookie=deleted; Max-Age=-1; SameSite=None; Secure'
+      } else {
+        headers["Set-Cookie"] = 'mycookie=cookie;'+(query.cookie == 'samesite'?' SameSite=None; Secure':'')
+      }
+    }
     res.writeHead(200, Object.assign(headers, {
-        "Set-Cookie": `mycookie=test`,
         "Content-Type": `application/json`
     }))
-    res.end(JSON.stringify({ number: 1 , name: 'John'}))
+
+    var myCookie = getCookieValue(req.headers.cookie, 'mycookie')
+    var result = {
+      "Cookie": myCookie? 'mycookie='+myCookie : '',
+      "Set-Cookie": headers["Set-Cookie"]
+    }
+
+    var json = JSON.stringify(result)
+    if (query.callback) {
+      res.end(`${query.callback}(${json});`)
+    } else {
+      res.end(json)
+    }
     return
   }
 
